@@ -2,26 +2,33 @@
 #include "./ui_check_laads_order.h"
 #include "fast_cksum.h"
 #include<QAction>
-#include <inttypes.h>
 #include <QDebug>
+#include <inttypes.h>
+#include <stdlib.h>
+
+
 check_laads_order::check_laads_order(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::check_laads_order)
 {
     ui->setupUi(this);
     connect(ui->actionAbout_Qt,&QAction::triggered,qApp,&QApplication::aboutQt);
-//    const char *filename = "/home/zheng/workspace/hellosome/testorder/MOD13A3.A2018182.mosaic.006.2021290053459.psmcrp_000501663056.1_km_monthly_NDVI-1_km_monthly_NDVI.tif";
-//    FILE *fp;
-//    fp = fopen(filename, "rb");
-//    if (fp == NULL)
-//    {
-//        fprintf(stderr, "File %s not found or cannot be opened.\n", filename);
-//        exit(1);
-//    }
-//    qDebug() << get_file_cksum(fp);
+    const char *filename = "/mnt/c/Users/xueke/Downloads/Music/aaa.ts";
+    FILE *fp;
+    fp=fopen(filename, "rb");
+    if (!fp)
+    {
+        fprintf(stderr, "File %s not found or cannot be opened.\n", filename);
+        exit(1);
+    }
+    qDebug() << get_file_cksum(fp);
+    fclose(fp);
 }
 uint32_t check_laads_order::get_file_cksum(FILE *fp)
 {
+#ifdef Q_OS_WINDOWS
+    #define posix_memalign(p, a, s)  (((*(p)) = _aligned_malloc((s), (a))), *(p) ?0 :errno)
+#endif
     const uint64_t BUFSIZE = 64 << 10;
     void *buffer = NULL;
     int ret = posix_memalign(&buffer, 65536, BUFSIZE);
@@ -41,7 +48,11 @@ uint32_t check_laads_order::get_file_cksum(FILE *fp)
     }
 
     uint32_t crc = crc32_fast_finalize(totalsize, partial_crc);
+#ifdef Q_OS_WINDOWS
+    _aligned_free(buffer);
+#else
     free(buffer);
+#  endif //Q_OS_WINDOWS
     return crc;
 }
 
