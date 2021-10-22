@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/add_circle.png</file>
+        <file>icons/exit.png</file>
+    </qresource>
+</RCC>
