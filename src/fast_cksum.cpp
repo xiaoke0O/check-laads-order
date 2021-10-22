@@ -13,9 +13,7 @@ https://pubs.opengroup.org/onlinepubs/009695399/utilities/cksum.html
 
 #include "fast_cksum.h"
 
-// define endianess and some integer data types
-// defines __BYTE_ORDER as __LITTLE_ENDIAN or __BIG_ENDIAN
-#include <sys/param.h>
+//#include <sys/param.h>
 
 // The standard CRC32 polynomial, in cksum's bit-reversed convention
 const uint32_t polynomial = 0x04C11DB7;
@@ -26,7 +24,6 @@ static inline uint32_t swap(uint32_t x)
 #if defined(__GNUC__) || defined(__clang__)
   return __builtin_bswap32(x);
 #else
-  #error "No builtin byte swap?"
   return (x >> 24) |
         ((x >>  8) & 0x0000FF00) |
         ((x <<  8) & 0x00FF0000) |
@@ -43,17 +40,13 @@ extern const uint32_t CksumLookup[MaxSlice][256]; // extern is needed to keep co
 uint32_t crc32_fast(const void* data, size_t length)
 {
   return crc32_fast_16bytes(data, length);
-  //return crc32_fast_32bytes_prefetch (data, length);
-  //return crc32_fast_16bytes_prefetch (data, length);
 }
 
 /// Main entry point for computing a partial result
 uint32_t crc32_fast_partial(const void* data, size_t length, uint32_t previousCrc32)
 {
   return crc32_fast_16bytes_partial(data, length, previousCrc32);
-  //return crc32_fast_32bytes_prefetch_partial(data, length, previousCrc32);
-  //return crc32_fast_16bytes_prefetch_partial(data, length, previousCrc32);
-}
+ }
 
 // Main entry point for finalization.
 // Having accumulated one or more partial results into a CRC,
@@ -88,29 +81,6 @@ uint32_t crc32_fast_16bytes_partial(const void* data, size_t length, uint32_t pr
   {
     for (size_t unrolling = 0; unrolling < Unroll; unrolling++)
     {
-#if __BYTE_ORDER == __BIG_ENDIAN
-    #error "Not tested"
-    uint32_t one   = *current++ ^ swap(crc);
-    uint32_t two   = *current++;
-    uint32_t three = *current++;
-    uint32_t four  = *current++;
-    crc  = CksumLookup[ 0][ four         & 0xFF] ^
-           CksumLookup[ 1][(four  >>  8) & 0xFF] ^
-           CksumLookup[ 2][(four  >> 16) & 0xFF] ^
-           CksumLookup[ 3][(four  >> 24)       ] ^
-           CksumLookup[ 4][ three        & 0xFF] ^
-           CksumLookup[ 5][(three >>  8) & 0xFF] ^
-           CksumLookup[ 6][(three >> 16) & 0xFF] ^
-           CksumLookup[ 7][(three >> 24)       ] ^
-           CksumLookup[ 8][ two          & 0xFF] ^
-           CksumLookup[ 9][(two   >>  8) & 0xFF] ^
-           CksumLookup[10][(two   >> 16) & 0xFF] ^
-           CksumLookup[11][(two   >> 24)       ] ^
-           CksumLookup[12][ one          & 0xFF] ^
-           CksumLookup[13][(one   >>  8) & 0xFF] ^
-           CksumLookup[14][(one   >> 16) & 0xFF] ^
-           CksumLookup[15][(one   >> 24)       ];
-#else
     uint32_t one   = *current++ ^ crc;
     uint32_t two   = *current++;
     uint32_t three = *current++;
@@ -131,7 +101,6 @@ uint32_t crc32_fast_16bytes_partial(const void* data, size_t length, uint32_t pr
            CksumLookup[13][(one   >> 16) & 0xFF] ^
            CksumLookup[14][(one   >>  8) & 0xFF] ^
            CksumLookup[15][ one          & 0xFF];
-#endif
     }
 
     length -= BytesAtOnce;
@@ -155,263 +124,7 @@ uint32_t crc32_fast_16bytes(const void* data, size_t length){
   return crc;
 }
 
-
-/* ================================ */
-// Begin 16 byte prefetch functions
-
-/// compute CRC32 (Slicing-by-16 algorithm, prefetch upcoming data blocks)
-/// Tries to emulate GNU cksum
-uint32_t crc32_fast_16bytes_prefetch_partial(const void* data, size_t length, uint32_t previousCrc32, size_t prefetchAhead)
-{
-  // CRC code is identical to crc32_fast_16bytes (including unrolling), only added prefetching
-  // 256 bytes look-ahead seems to be the sweet spot on Core i7 CPUs
-  // This version produces the same results as GNU cksum
-
-  uint32_t crc = swap(~previousCrc32);
-  const uint32_t* current = (const uint32_t*) data;
-
-  // enabling optimization (at least -O2) automatically unrolls the for-loop
-  const size_t Unroll = 4;
-  const size_t BytesAtOnce = 16 * Unroll;
-
-  while (length >= BytesAtOnce + prefetchAhead)
-  {
-    PREFETCH(((const char*) current) + prefetchAhead);
-
-    for (size_t unrolling = 0; unrolling < Unroll; unrolling++)
-    {
-#if __BYTE_ORDER == __BIG_ENDIAN
-    #error "Not tested"
-    uint32_t one   = *current++ ^ swap(crc);
-    uint32_t two   = *current++;
-    uint32_t three = *current++;
-    uint32_t four  = *current++;
-    crc  = CksumLookup[ 0][ four         & 0xFF] ^
-           CksumLookup[ 1][(four  >>  8) & 0xFF] ^
-           CksumLookup[ 2][(four  >> 16) & 0xFF] ^
-           CksumLookup[ 3][(four  >> 24)       ] ^
-           CksumLookup[ 4][ three        & 0xFF] ^
-           CksumLookup[ 5][(three >>  8) & 0xFF] ^
-           CksumLookup[ 6][(three >> 16) & 0xFF] ^
-           CksumLookup[ 7][(three >> 24)       ] ^
-           CksumLookup[ 8][ two          & 0xFF] ^
-           CksumLookup[ 9][(two   >>  8) & 0xFF] ^
-           CksumLookup[10][(two   >> 16) & 0xFF] ^
-           CksumLookup[11][(two   >> 24)       ] ^
-           CksumLookup[12][ one          & 0xFF] ^
-           CksumLookup[13][(one   >>  8) & 0xFF] ^
-           CksumLookup[14][(one   >> 16) & 0xFF] ^
-           CksumLookup[15][(one   >> 24)       ];
-#else
-    uint32_t one   = *current++ ^ crc;
-    uint32_t two   = *current++;
-    uint32_t three = *current++;
-    uint32_t four  = *current++;
-    crc  = CksumLookup[ 0][(four  >> 24)       ] ^
-           CksumLookup[ 1][(four  >> 16) & 0xFF] ^
-           CksumLookup[ 2][(four  >>  8) & 0xFF] ^
-           CksumLookup[ 3][ four         & 0xFF] ^
-           CksumLookup[ 4][(three >> 24)       ] ^
-           CksumLookup[ 5][(three >> 16) & 0xFF] ^
-           CksumLookup[ 6][(three >>  8) & 0xFF] ^
-           CksumLookup[ 7][ three        & 0xFF] ^
-           CksumLookup[ 8][(two   >> 24)       ] ^
-           CksumLookup[ 9][(two   >> 16) & 0xFF] ^
-           CksumLookup[10][(two   >>  8) & 0xFF] ^
-           CksumLookup[11][ two          & 0xFF] ^
-           CksumLookup[12][(one   >> 24)       ] ^
-           CksumLookup[13][(one   >> 16) & 0xFF] ^
-           CksumLookup[14][(one   >>  8) & 0xFF] ^
-           CksumLookup[15][ one          & 0xFF];
-#endif
-    }
-
-    length -= BytesAtOnce;
-  }
-
-  const uint8_t* currentChar = (const uint8_t*) current;
-  // remaining 1 to 63 bytes (standard algorithm)
-  // Maybe we could avoid some swaps, but it's only a few bytes
-  crc = swap(crc);
-  while (length-- != 0)
-    crc = (crc << 8) ^ swap(CksumLookup[0][(crc >> 24) ^ *currentChar++]);
-
-  return ~crc; // same as crc ^ 0xFFFFFFFF
-}
-
-
-uint32_t crc32_fast_16bytes_prefetch(const void* data, size_t length, size_t prefetchAhead){
-  uint32_t crc = crc32_fast_16bytes_prefetch_partial(data, length, prefetchAhead);
-  crc = crc32_fast_finalize(length, crc);
-
-  return crc;
-}
-
-
-/* ================================ */
-// Begin 32 byte prefetch functions
-
-
-/// compute CRC32 (Slicing-by-32 algorithm, prefetch upcoming data blocks)
-/// Tries to emulate GNU cksum
-uint32_t crc32_fast_32bytes_prefetch_partial(const void* data, size_t length, uint32_t previousCrc32, size_t prefetchAhead)
-{
-  // CRC code is identical to crc32_fast_16bytes (including unrolling), only added prefetching
-  // 256 bytes look-ahead seems to be the sweet spot on Core i7 CPUs
-  // This version produces the same results as GNU cksum
-
-  uint32_t crc = swap(~previousCrc32);
-  const uint32_t* current = (const uint32_t*) data;
-
-  // enabling optimization (at least -O2) automatically unrolls the for-loop
-  const size_t Unroll = 4;
-  const size_t BytesAtOnce = 32 * Unroll;
-
-  while (length >= BytesAtOnce + prefetchAhead)
-  {
-    PREFETCH(((const char*) current) + prefetchAhead);
-
-    for (size_t unrolling = 0; unrolling < Unroll; unrolling++)
-    {
-#if __BYTE_ORDER == __BIG_ENDIAN
-    #error "BE not implemented"
-#else
-    uint32_t one   = *current++ ^ crc;
-    uint32_t two   = *current++;
-    uint32_t three = *current++;
-    uint32_t four  = *current++;
-    uint32_t five  = *current++;
-    uint32_t six   = *current++;
-    uint32_t seven = *current++;
-    uint32_t eight = *current++;
-    crc  = CksumLookup[ 0][(eight >> 24)       ] ^
-           CksumLookup[ 1][(eight >> 16) & 0xFF] ^
-           CksumLookup[ 2][(eight >>  8) & 0xFF] ^
-           CksumLookup[ 3][ eight        & 0xFF] ^
-           CksumLookup[ 4][(seven >> 24)       ] ^
-           CksumLookup[ 5][(seven >> 16) & 0xFF] ^
-           CksumLookup[ 6][(seven >>  8) & 0xFF] ^
-           CksumLookup[ 7][ seven        & 0xFF] ^
-           CksumLookup[ 8][(six   >> 24)       ] ^
-           CksumLookup[ 9][(six   >> 16) & 0xFF] ^
-           CksumLookup[10][(six   >>  8) & 0xFF] ^
-           CksumLookup[11][ six          & 0xFF] ^
-           CksumLookup[12][(five  >> 24)       ] ^
-           CksumLookup[13][(five  >> 16) & 0xFF] ^
-           CksumLookup[14][(five  >>  8) & 0xFF] ^
-           CksumLookup[15][ five         & 0xFF] ^
-           CksumLookup[16][(four  >> 24)       ] ^
-           CksumLookup[17][(four  >> 16) & 0xFF] ^
-           CksumLookup[18][(four  >>  8) & 0xFF] ^
-           CksumLookup[19][ four         & 0xFF] ^
-           CksumLookup[20][(three >> 24)       ] ^
-           CksumLookup[21][(three >> 16) & 0xFF] ^
-           CksumLookup[22][(three >>  8) & 0xFF] ^
-           CksumLookup[23][ three        & 0xFF] ^
-           CksumLookup[24][(two   >> 24)       ] ^
-           CksumLookup[25][(two   >> 16) & 0xFF] ^
-           CksumLookup[26][(two   >>  8) & 0xFF] ^
-           CksumLookup[27][ two          & 0xFF] ^
-           CksumLookup[28][(one   >> 24)       ] ^
-           CksumLookup[29][(one   >> 16) & 0xFF] ^
-           CksumLookup[30][(one   >>  8) & 0xFF] ^
-           CksumLookup[31][ one          & 0xFF];
-#endif
-    }
-
-    length -= BytesAtOnce;
-  }
-
-  const uint8_t* currentChar = (const uint8_t*) current;
-  // remaining 1 to 63 bytes (standard algorithm)
-  crc = swap(crc);
-  while (length-- != 0)
-    crc = (crc << 8) ^ swap(CksumLookup[0][(crc >> 24) ^ *currentChar++]);
-
-  return ~crc; // same as crc ^ 0xFFFFFFFF
-}
-
-
-uint32_t crc32_fast_32bytes_prefetch(const void* data, size_t length, size_t prefetchAhead){
-  uint32_t crc = crc32_fast_32bytes_prefetch_partial(data, length, prefetchAhead);
-  crc = crc32_fast_finalize(length, crc);
-
-  return crc;
-}
-
-#ifdef TEST
-// g++ -DTEST -O3 fast_cksum.cpp -o crc32test
-#include <cstdio>
-#include <cassert>
-#include <time.h>
-
-static double seconds()
-{
-  timespec now;
-  clock_gettime(CLOCK_REALTIME, &now);
-  return now.tv_sec + now.tv_nsec / 1e9;
-}
-
-int main(int argc, char **argv){
-  printf("Please wait ...\n");
-
-  size_t NumBytes;
-  char* data;
-
-  if(argc > 1){
-    char *infn = argv[1];
-    FILE *fp = fopen(infn, "rb");
-    assert(fp != NULL);
-    fseek(fp, 0, SEEK_END);
-    NumBytes = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-    printf("Reading file %s with %zu bytes\n", infn, NumBytes);
-
-    data = new char[NumBytes];
-
-    assert(fread(data, 1, NumBytes, fp) == NumBytes);
-
-  } else {
-    NumBytes = 100*1024*1024;
-
-    data = new char[NumBytes];
-
-    uint32_t randomNumber = 0x27121978;
-    for (size_t i = 0; i < NumBytes; i++)
-    {
-      data[i] = char(randomNumber & 0xFF);
-      // simple LCG, see http://en.wikipedia.org/wiki/Linear_congruential_generator
-      randomNumber = 1664525 * randomNumber + 1013904223;
-    }
-
-    // dump the random data to disk so we can compare with command line cksum
-    FILE *fp;
-    assert((fp = fopen("rand.dat", "wb")) != NULL);
-    assert(fwrite(data, 1, NumBytes, fp) == NumBytes);
-    fclose(fp);
-
-    // initialize
-    //char* data = new char[NumBytes]{0x61, 0x73, 0x64, 0x0a};
-
-  }
-
-  // re-use variables
-  double startTime, duration;
-  uint32_t crc;
-
-  // fast
-  startTime = seconds();
-  crc = crc32_fast_16bytes(data, NumBytes);
-  duration  = seconds() - startTime;
-  printf("16 bytes      : CRC=%08X, %.3fs, %.3f MB/s\n",
-         crc, duration, (NumBytes / (1024*1024)) / duration);
-
-  delete[] data;
-}
-#endif
-
-
-// //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 // constants
 
 const uint32_t CksumLookup[32][256] = {
