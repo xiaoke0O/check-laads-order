@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>i1n/check_laads_order_zh_CN.qm</file>
+    </qresource>
+</RCC>
