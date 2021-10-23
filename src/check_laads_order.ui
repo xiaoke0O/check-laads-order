@@ -6,20 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>339</height>
+    <width>680</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>check_laads_order</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableWidget" name="tableWidget">
+      <column>
+       <property name="text">
+        <string>orders</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>File Number</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>527</width>
+     <width>680</width>
      <height>30</height>
     </rect>
    </property>
@@ -39,7 +56,14 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuCheck">
+    <property name="title">
+     <string>Check</string>
+    </property>
+    <addaction name="actionStart"/>
+   </widget>
    <addaction name="menuTasks"/>
+   <addaction name="menuCheck"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -60,6 +84,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionCkeck_Order"/>
+   <addaction name="actionStart"/>
    <addaction name="actionExit"/>
   </widget>
   <action name="actionAbout">
@@ -73,6 +98,9 @@
    </property>
   </action>
   <action name="actionCkeck_Order">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="icons.qrc">
      <normaloff>:/icons/icons/add_circle.png</normaloff>:/icons/icons/add_circle.png</iconset>
@@ -88,6 +116,15 @@
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/play.png</normaloff>:/icons/icons/play.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start</string>
    </property>
   </action>
  </widget>
