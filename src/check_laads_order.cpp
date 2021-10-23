@@ -1,6 +1,6 @@
 #include "check_laads_order.h"
 
-#include <inttypes.h>
+#include <cinttypes>
 
 #include <QFileDialog>
 #include <QStandardPaths>
@@ -31,14 +31,14 @@ uint32_t check_laads_order::get_file_cksum(FILE *fp) {
     }
 
     uint32_t partial_crc = CRC32_FAST_SEED;
-    size_t totalsize = 0;
+    size_t total_size = 0;
     size_t count;
     while ((count = fread(buffer, 1, BUFSIZE, fp))) {
         partial_crc = crc32_fast_partial(buffer, count, partial_crc);
-        totalsize += count;
+        total_size += count;
     }
 
-    uint32_t crc = crc32_fast_finalize(totalsize, partial_crc);
+    uint32_t crc = crc32_fast_finalize(total_size, partial_crc);
 #ifdef Q_OS_WINDOWS
     _aligned_free(buffer);
 #else

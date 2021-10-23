@@ -13,9 +13,9 @@ class check_laads_order : public QMainWindow {
 Q_OBJECT
 
 public:
-    check_laads_order(QWidget *parent = nullptr);
+    explicit check_laads_order(QWidget *parent = nullptr);
 
-    ~check_laads_order();
+    ~check_laads_order() override;
 
 private:
     uint32_t get_file_cksum(FILE *fp);
