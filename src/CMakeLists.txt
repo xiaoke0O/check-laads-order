@@ -1,21 +1,15 @@
-set(TS_FILES ../i1n/check_laads_order_zh_CN.ts)
+add_executable(check_laads_order 
+check_laads_order.ui
+icons.qrc
+translations.qrc
+check_laads_order.cpp
+fast_cksum.cpp
+main.cpp
+)
+# 如果是Release模式，就添加WIN32_EXECUTABLE属性，即隐藏终端窗口
+set_property(TARGET check_laads_order PROPERTY WIN32_EXECUTABLE $<CONFIG:Release>)
 
-set(PROJECT_SOURCES
-    main.cpp
-    check_laads_order.cpp
-    check_laads_order.h
-    fast_cksum.cpp
-    fast_cksum.h
-    check_laads_order.ui
-    icons.qrc
-    ${TS_FILES}
-    )
-
-qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-
-add_executable(check_laads_order ${PROJECT_SOURCES})
-
-target_link_libraries(check_laads_order PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(check_laads_order PRIVATE Qt5::Widgets)
 
 # 最高警告等级，并将警告视为错误，强制MSVC视源文件为utf8编码
 if (MSVC)
