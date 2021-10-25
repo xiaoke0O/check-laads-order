@@ -50,8 +50,12 @@
     </message>
     <message>
         <location filename="../check_laads_order.ui" line="109"/>
-        <source>Ckeck Order</source>
+        <source>Import Order</source>
         <translation>导入订单</translation>
+    </message>
+    <message>
+        <source>Ckeck Order</source>
+        <translation type="vanished">导入订单</translation>
     </message>
     <message>
         <location filename="../check_laads_order.ui" line="118"/>
@@ -64,7 +68,7 @@
         <translation>开始校验</translation>
     </message>
     <message>
-        <location filename="../check_laads_order.cpp" line="47"/>
+        <location filename="../check_laads_order.cpp" line="51"/>
         <source>Open Orders Directory</source>
         <translation>打开订单文件</translation>
     </message>

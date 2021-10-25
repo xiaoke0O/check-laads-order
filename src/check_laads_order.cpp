@@ -13,7 +13,7 @@ check_laads_order::check_laads_order(QWidget *parent)
     ui->setupUi(this);
     connect(ui->actionAbout_Qt, &QAction::triggered, qApp,
             &QApplication::aboutQt);
-    connect(ui->actionCkeck_Order, &QAction::triggered, this,
+    connect(ui->actionImport_Order, &QAction::triggered, this,
             &check_laads_order::search_orders);
 }
 
@@ -49,11 +49,13 @@ uint32_t check_laads_order::get_file_cksum(FILE *fp) {
 
 QString check_laads_order::get_orders_directory() {
     QString dialog_title = tr("Open Orders Directory");
-    QString open_dir =
-            QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    QString open_dir = QStandardPaths::writableLocation(
+            QStandardPaths::DownloadLocation);
     return QFileDialog::getExistingDirectory(this, dialog_title, open_dir);
 }
 
-void check_laads_order::search_orders() {}
+void check_laads_order::search_orders() {
+    QString order_dir=get_orders_directory();
+}
 
 check_laads_order::~check_laads_order() { delete ui; }

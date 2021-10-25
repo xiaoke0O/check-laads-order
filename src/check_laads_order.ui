@@ -37,7 +37,7 @@
      <x>0</x>
      <y>0</y>
      <width>680</width>
-     <height>30</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -52,7 +52,7 @@
     <property name="title">
      <string>Tasks</string>
     </property>
-    <addaction name="actionCkeck_Order"/>
+    <addaction name="actionImport_Order"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -83,7 +83,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionCkeck_Order"/>
+   <addaction name="actionImport_Order"/>
    <addaction name="actionStart"/>
    <addaction name="actionExit"/>
   </widget>
@@ -97,7 +97,7 @@
     <string>About Qt</string>
    </property>
   </action>
-  <action name="actionCkeck_Order">
+  <action name="actionImport_Order">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -106,7 +106,7 @@
      <normaloff>:/icons/icons/add_circle.png</normaloff>:/icons/icons/add_circle.png</iconset>
    </property>
    <property name="text">
-    <string>Ckeck Order</string>
+    <string>Import Order</string>
    </property>
   </action>
   <action name="actionExit">
