@@ -2,6 +2,9 @@
 #define CHECK_LAADS_ORDER_H
 
 #include <QMainWindow>
+#include <QDir>
+#include "Order.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,11 +21,14 @@ public:
     ~check_laads_order() override;
 
 private:
-    uint32_t get_file_cksum(FILE *fp);
-
     QString get_orders_directory();
 
+    QMap<QString, Order> orders;
+private slots :
+
     void search_orders();
+
+    void do_check();
 
 private:
     Ui::check_laads_order *ui;
