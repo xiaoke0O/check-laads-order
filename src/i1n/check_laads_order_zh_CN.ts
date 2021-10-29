@@ -70,7 +70,7 @@
     <message>
         <location filename="../check_laads_order.cpp" line="51"/>
         <source>Open Orders Directory</source>
-        <translation>打开订单文件</translation>
+        <translation>打开订单文件夹</translation>
     </message>
 </context>
 </TS>
