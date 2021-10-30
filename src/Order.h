@@ -18,7 +18,7 @@
 #endif
 
 
-class Order:public QObject{
+class Order : public QObject {
 Q_OBJECT
 public:
     Order(QString local_order_dir, QString checksum_file);
@@ -30,6 +30,7 @@ public:
     int get_local_file_number() { return local_files_list.size(); };
 
     void calculate_local_cksum();
+
 private:
     QString order_sn;
     QMap<QString, QString> order_files_package;
@@ -41,7 +42,6 @@ private:
     void parsing_checksum_file(QString cksum_file);
 
     void parsing_local_file(QString order_dir);
-
 
 
     void compare_cksum();

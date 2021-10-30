@@ -94,14 +94,15 @@ uint32_t Order::get_file_cksum(FILE *fp) {
 }
 
 void Order::calculate_local_cksum() {
-   QProgressDialog progressDialog;
-   progressDialog.setCancelButtonText(tr("&Cancel"));
-   int file_count=local_files_list.size();
-   qDebug()<<file_count;
-   progressDialog.setRange(0, file_count);
-   progressDialog.setWindowTitle(tr("Calculate Order Files cksum"));
+    QProgressDialog progressDialog;
+    progressDialog.setCancelButtonText(tr("&Cancel"));
+    int file_count = local_files_list.size();
+    qDebug() << file_count;
+    progressDialog.setRange(0, file_count);
+    progressDialog.setWindowTitle(tr("Calculate Order Files cksum"));
 
-    for (decltype(local_files_list.size()) i=0;i<local_files_list.size();i++) {
+    for (decltype(local_files_list.size()) i = 0;
+         i < local_files_list.size(); i++) {
         QString file_name = local_files_list[i].split("/").takeLast();
         std::string str = local_files_list[i].toStdString();
         const char *file_path_c = str.c_str();
@@ -112,10 +113,16 @@ void Order::calculate_local_cksum() {
         local_files_package.insert(file_name, checksum);
 
         progressDialog.setValue(i);
+        progressDialog.setLabelText(
+                tr("Runing file number %1 of %n...", nullptr,
+                   local_files_list.size()).arg(i));
         QCoreApplication::processEvents();
         if (progressDialog.wasCanceled())
-           break;
+            break;
     }
-       progressDialog.setValue(file_count);
+    progressDialog.setValue(file_count);
 
+}
+
+void Order::compare_cksum() {
 }

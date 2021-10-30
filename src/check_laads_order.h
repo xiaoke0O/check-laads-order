@@ -23,12 +23,12 @@ public:
 private:
     QString get_orders_directory();
 
-    QMap<QString, Order*> orders;
+    QMap<QString, Order *> orders;
 private slots :
 
     void search_orders();
 
-    void do_check();
+    void do_check() { for (auto &w: orders) w->calculate_local_cksum(); };
 
 private:
     Ui::check_laads_order *ui;

@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QDirIterator>
 #include <QStringList>
-#include <QProgressDialog>
 
 #include "./ui_check_laads_order.h"
 #include "fast_cksum.h"
@@ -40,8 +39,8 @@ void check_laads_order::search_orders() {
                     QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();
-        Order *_order=new Order(it.fileInfo().canonicalPath(), it.filePath());
-        orders.insert(it.filePath(),_order);
+        auto *_order = new Order(it.fileInfo().canonicalPath(), it.filePath());
+        orders.insert(it.fileInfo().baseName(), _order);
     }
     if (!orders.isEmpty()) {
         ui->actionStart->setEnabled(true);
@@ -61,12 +60,5 @@ void check_laads_order::search_orders() {
 
 
 check_laads_order::~check_laads_order() { delete ui; }
-
-void check_laads_order::do_check() {
-   for (auto &w:orders) {
-        w->calculate_local_cksum();
-   }
-
-}
 
 
