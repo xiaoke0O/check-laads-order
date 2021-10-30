@@ -12,6 +12,7 @@
 //TODO: Release时删除
 #include <QDebug>
 #include <QDirIterator>
+#include <QCoreApplication>
 
 #include "fast_cksum.h"
 
@@ -93,14 +94,28 @@ uint32_t Order::get_file_cksum(FILE *fp) {
 }
 
 void Order::calculate_local_cksum() {
-    for (auto &local_file: local_files_list) {
-        QString file_name = local_file.split("/").takeLast();
-        std::string str = local_file.toStdString();
+   QProgressDialog progressDialog;
+   progressDialog.setCancelButtonText(tr("&Cancel"));
+   int file_count=local_files_list.size();
+   qDebug()<<file_count;
+   progressDialog.setRange(0, file_count);
+   progressDialog.setWindowTitle(tr("Calculate Order Files cksum"));
+
+    for (decltype(local_files_list.size()) i=0;i<local_files_list.size();i++) {
+        QString file_name = local_files_list[i].split("/").takeLast();
+        std::string str = local_files_list[i].toStdString();
         const char *file_path_c = str.c_str();
         FILE *fp;
         fopen_s(&fp, file_path_c, "rb");
         QString checksum = QString::number(get_file_cksum(fp));
         fclose(fp);
         local_files_package.insert(file_name, checksum);
+
+        progressDialog.setValue(i);
+        QCoreApplication::processEvents();
+        if (progressDialog.wasCanceled())
+           break;
     }
+       progressDialog.setValue(file_count);
+
 }

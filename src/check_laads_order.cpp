@@ -40,9 +40,8 @@ void check_laads_order::search_orders() {
                     QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();
-
-        orders.insert(it.filePath(),
-                      Order(it.fileInfo().canonicalPath(), it.filePath()));
+        Order *_order=new Order(it.fileInfo().canonicalPath(), it.filePath());
+        orders.insert(it.filePath(),_order);
     }
     if (!orders.isEmpty()) {
         ui->actionStart->setEnabled(true);
@@ -50,11 +49,11 @@ void check_laads_order::search_orders() {
         int ix = 0;
         for (auto &w: orders) {
             ui->tableWidget->setItem(ix, 0, new QTableWidgetItem(
-                    w.get_order_sn()));
+                    w->get_order_sn()));
             ui->tableWidget->setItem(ix, 1, new QTableWidgetItem(
-                    QString::number(w.get_order_file_number())));
+                    QString::number(w->get_order_file_number())));
             ui->tableWidget->setItem(ix, 2, new QTableWidgetItem(
-                    QString::number(w.get_local_file_number())));
+                    QString::number(w->get_local_file_number())));
             ix++;
         }
     }
@@ -64,25 +63,10 @@ void check_laads_order::search_orders() {
 check_laads_order::~check_laads_order() { delete ui; }
 
 void check_laads_order::do_check() {
-    qDebug()<<"Begin Check";
-//    for (auto &w:orders) {
-//        for (:) {
-//
-//        }
-//    }
-//    QProgressDialog progressDialog(this);
-//    progressDialog.setCancelButtonText(tr("&Cancel"));
-//    int file_count=ui->tableWidget->item(0,1)->text().toInt();
-//    qDebug()<<file_count;
-//    progressDialog.setRange(0, file_count);
-//    progressDialog.setWindowTitle(tr("Find Files"));
-//    for (int i = 0; i < file_count; i++) {
-//        progressDialog.setValue(i);
-//        QCoreApplication::processEvents();
-//        if (progressDialog.wasCanceled())
-//            break;
-//    }
-//    progressDialog.setValue(file_count);
+   for (auto &w:orders) {
+        w->calculate_local_cksum();
+   }
+
 }
 
 

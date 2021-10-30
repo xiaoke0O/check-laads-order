@@ -18,8 +18,8 @@
 #endif
 
 
-class Order{
-
+class Order:public QObject{
+Q_OBJECT
 public:
     Order(QString local_order_dir, QString checksum_file);
 
@@ -28,6 +28,7 @@ public:
     int get_order_file_number() { return order_files_package.size(); };
 
     int get_local_file_number() { return local_files_list.size(); };
+
     void calculate_local_cksum();
 private:
     QString order_sn;

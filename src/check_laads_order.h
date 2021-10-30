@@ -23,7 +23,7 @@ public:
 private:
     QString get_orders_directory();
 
-    QMap<QString, Order> orders;
+    QMap<QString, Order*> orders;
 private slots :
 
     void search_orders();
