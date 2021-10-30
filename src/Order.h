@@ -37,13 +37,22 @@ private:
     QStringList local_files_list;
     QMap<QString, QString> local_files_package;
 
+    QStringList missing_file;
+    QStringList error_file;
+    QStringList extra_files;
+
+
     uint32_t get_file_cksum(FILE *fp);
 
     void parsing_checksum_file(QString cksum_file);
 
     void parsing_local_file(QString order_dir);
 
-
+// 通过对比从cksum文件中提取的文件名和cksum值与从本地文件统计得到的文件名和cksum值
+// 筛选出
+// 缺失文件——cksum文件中有而本地没有的文件；
+// 错误文件——cksum值不匹配的文件；
+// 多余文件——本地有而cksum文件中没有的文件
     void compare_cksum();
 };
 
