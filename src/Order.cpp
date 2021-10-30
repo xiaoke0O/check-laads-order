@@ -31,7 +31,7 @@ void Order::parsing_checksum_file(QString cksum_file) {
             line = in.readLine();
             if (line.startsWith('#'))
                 continue;
-            QStringList parts = line.split(' ', Qt::SkipEmptyParts);
+            QStringList parts = line.split(' ', QString::SkipEmptyParts);
             QString checksum = parts[0];
             QString file_name = parts[2];
             order_files_package.insert(file_name, checksum);
@@ -46,22 +46,6 @@ void Order::parsing_local_file(QString local_order_dir) {
     while (order_file_iter.hasNext()) {
         local_files_list << order_file_iter.next();
     }
-//        QString file_name = file_path.split("/").takeLast();
-//std::string str=file_path.toStdString();
-//        const char * file_path_c=str.c_str();
-//        FILE *fp;
-//        fopen_s(&fp,file_path_c, "rb");
-//        if (fp == NULL) {
-//            fprintf(stderr, "File %s not found or cannot be opened.\n",
-//                    file_path_c);
-//            exit(1);
-//        }
-//            QString checksum = QString::number(get_file_cksum(fp));
-//            fclose(fp);
-//            local_files.insert(file_name, checksum);
-//            qDebug()<<checksum;
-//    }
-
 }
 
 uint32_t Order::get_file_cksum(FILE *fp) {
@@ -107,14 +91,14 @@ void Order::calculate_local_cksum() {
         std::string str = local_files_list[i].toStdString();
         const char *file_path_c = str.c_str();
         FILE *fp;
-        fopen_s(&fp, file_path_c, "rb");
+        fp = fopen(file_path_c, "rb");
         QString checksum = QString::number(get_file_cksum(fp));
         fclose(fp);
         local_files_package.insert(file_name, checksum);
 
         progressDialog.setValue(i);
         progressDialog.setLabelText(
-                tr("Runing file number %1 of %n...", nullptr,
+                tr("Running file number %1 of %n", nullptr,
                    local_files_list.size()).arg(i));
         QCoreApplication::processEvents();
         if (progressDialog.wasCanceled())
@@ -125,4 +109,5 @@ void Order::calculate_local_cksum() {
 }
 
 void Order::compare_cksum() {
+
 }

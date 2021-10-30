@@ -28,7 +28,7 @@ private slots :
 
     void search_orders();
 
-    void do_check() { for (auto &w: orders) w->calculate_local_cksum(); };
+    void do_check() ;
 
 private:
     Ui::check_laads_order *ui;
