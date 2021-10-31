@@ -5,5 +5,6 @@
         <file>icons/play.png</file>
         <file>icons/clear_all.png</file>
         <file>icons/backspace.png</file>
+        <file>icons/visibility.png</file>
     </qresource>
 </RCC>

@@ -119,6 +119,7 @@
      <string>Check</string>
     </property>
     <addaction name="actionStart"/>
+    <addaction name="actionOpen_Check_Report"/>
    </widget>
    <widget class="QMenu" name="menuOrder">
     <property name="title">
@@ -152,6 +153,7 @@
    <addaction name="actionImport_Order"/>
    <addaction name="actionClear_All"/>
    <addaction name="actionStart"/>
+   <addaction name="actionOpen_Check_Report"/>
    <addaction name="actionExit"/>
   </widget>
   <action name="actionAbout">
@@ -222,6 +224,21 @@
    </property>
    <property name="text">
     <string>Clear Selected</string>
+   </property>
+  </action>
+  <action name="actionOpen_Check_Report">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/visibility.png</normaloff>:/icons/icons/visibility.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Check Report</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

@@ -22,10 +22,15 @@ check_laads_order::check_laads_order(QWidget *parent)
             &check_laads_order::remove_all_orders);
     connect(ui->actionStart, &QAction::triggered, this,
             &check_laads_order::do_check);
-    connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this,
-            &check_laads_order::item_selection_changed);
     connect(ui->actionClear_Selected, &QAction::triggered, this,
             &check_laads_order::remove_selected_orders);
+    connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this,
+            &check_laads_order::item_selection_changed);
+//    connect(ui->actionOpen_Check_Report, &QAction::triggered, this,
+//            &check_laads_order::show_report);
+    connect(ui->tableWidget, &QTableWidget::itemDoubleClicked, this,
+            &check_laads_order::show_report);
+
 }
 
 QString check_laads_order::get_orders_directory() {
@@ -79,9 +84,10 @@ void check_laads_order::do_check() {
 
 void
 check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
-    qDebug() << calculate_status;
 
     if (calculate_status) {
+        ui->actionOpen_Check_Report->setEnabled(true);
+        ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
         result_cell_color.setNamedColor("#77D970");
         result_cell_text = tr("PASS!");
         // 如果有错误文件，就变成红色
@@ -128,6 +134,14 @@ void check_laads_order::remove_selected_orders() {
 void check_laads_order::item_selection_changed() {
     bool b = ui->tableWidget->selectedItems().isEmpty();
     ui->actionClear_Selected->setEnabled(!b);
+}
+
+void check_laads_order::show_report() {
+    if (ui->tableWidget->currentItem()->column() == 3) {
+        auto current_item = ui->tableWidget->currentItem();
+        auto current_sn = ui->tableWidget->item(current_item->row(), 0)->text();
+        orders.find(current_sn).value()->show_report();
+    }
 }
 
 

@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QProgressDialog>
 #include <QTimer>
+#include "report.h"
 
 #ifdef Q_OS_WINDOWS
 #define posix_memalign(p, a, s) \
@@ -33,6 +34,7 @@ public:
 
     bool calculate_local_cksum();
 
+    void show_report();
 
 private:
     QString order_sn;
@@ -47,7 +49,9 @@ private:
     QStringList missing_files;
     QStringList extra_files;
 
+    report *this_order_report;
 
+private:
     uint32_t get_file_cksum(FILE *fp);
 
     void parsing_checksum_file(QString cksum_file);
@@ -60,6 +64,7 @@ private:
 // 错误文件——cksum值不匹配的文件；
 // 多余文件——本地有而cksum文件中没有的文件
     void compare_cksum();
+
     void create_report();
 };
 

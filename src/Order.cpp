@@ -147,3 +147,13 @@ bool Order::get_check_result() {
             !missing_files.isEmpty() ||
             !extra_files.isEmpty());
 }
+
+void Order::create_report() {
+this_order_report=new report(order_sn);
+this_order_report->set_content(error_files,missing_files,extra_files);
+}
+
+void Order::show_report() {
+create_report();
+this_order_report->show();
+}

@@ -41,6 +41,8 @@ private slots :
 
     void do_check();
 
+    void show_report();
+
 private:
     Ui::check_laads_order *ui;
 };
