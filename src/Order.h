@@ -31,14 +31,16 @@ public:
 
     void calculate_local_cksum();
 
+
 private:
     QString order_sn;
     QMap<QString, QString> order_files_package;
     QStringList local_files_list;
     QMap<QString, QString> local_files_package;
 
-    QStringList missing_file;
-    QStringList error_file;
+    QStringList match_files;
+    QStringList error_files;
+    QStringList missing_files;
     QStringList extra_files;
 
 

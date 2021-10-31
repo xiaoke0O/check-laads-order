@@ -9,10 +9,11 @@
 #include <QTextStream>
 #include <QString>
 #include <QStringList>
-//TODO: Release时删除
-#include <QDebug>
 #include <QDirIterator>
 #include <QCoreApplication>
+//TODO: Release时删除
+#include <QDebug>
+
 
 #include "fast_cksum.h"
 
@@ -106,8 +107,36 @@ void Order::calculate_local_cksum() {
     }
     progressDialog.setValue(file_count);
 
+    compare_cksum();
 }
 
 void Order::compare_cksum() {
+    QMapIterator<QString, QString> i(order_files_package);
+    QMapIterator<QString, QString> i_local(local_files_package);
+    while (i_local.hasNext()) {
+        i_local.next();
+        auto x = order_files_package.find(i_local.key());
+        //说明找到了并且匹配了
+        if (x != order_files_package.end() && x.value() == i_local.value()) {
+            match_files << x.key();
+            order_files_package.erase(x);
+            continue;
+        }
+        //说明找到了但是不匹配
+        if (x != order_files_package.end() && x.value() != i_local.value()) {
+            error_files << x.key();
+            order_files_package.erase(x);
+            continue;
+        }
+        //说明在b中有而a中没有，那么这个就是多余项
+        if (x == order_files_package.end())
+            extra_files << i_local.key();
+    }
+    //等全都检索完了，a也擦除完了，a中剩下的没被擦除的，就是b中缺失的。
+    missing_files << order_files_package.keys();
 
+    qDebug() << tr("ab匹配的：%1").arg(match_files.size());
+    qDebug() << tr("b中错误的：%1").arg(error_files.size());
+    qDebug() << tr("b中缺失的：%1").arg(missing_files.size());
+    qDebug() << tr("b中多余的：%1").arg(extra_files.size());
 }
