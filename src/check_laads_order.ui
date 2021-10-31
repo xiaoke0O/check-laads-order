@@ -23,6 +23,9 @@
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <property name="sortingEnabled">
        <bool>false</bool>
       </property>
@@ -92,7 +95,7 @@
      <x>0</x>
      <y>0</y>
      <width>532</width>
-     <height>32</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -108,7 +111,6 @@
      <string>Tasks</string>
     </property>
     <addaction name="actionImport_Order"/>
-    <addaction name="actionClear_All"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -118,7 +120,15 @@
     </property>
     <addaction name="actionStart"/>
    </widget>
+   <widget class="QMenu" name="menuOrder">
+    <property name="title">
+     <string>Order</string>
+    </property>
+    <addaction name="actionClear_All"/>
+    <addaction name="actionClear_Selected"/>
+   </widget>
    <addaction name="menuTasks"/>
+   <addaction name="menuOrder"/>
    <addaction name="menuCheck"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -157,6 +167,9 @@
   <action name="actionImport_Order">
    <property name="checkable">
     <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="icons.qrc">
@@ -197,6 +210,18 @@
    </property>
    <property name="text">
     <string>Clear All</string>
+   </property>
+  </action>
+  <action name="actionClear_Selected">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/backspace.png</normaloff>:/icons/icons/backspace.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Selected</string>
    </property>
   </action>
  </widget>

@@ -4,5 +4,6 @@
         <file>icons/exit.png</file>
         <file>icons/play.png</file>
         <file>icons/clear_all.png</file>
+        <file>icons/backspace.png</file>
     </qresource>
 </RCC>

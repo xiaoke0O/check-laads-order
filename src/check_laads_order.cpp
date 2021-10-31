@@ -19,9 +19,13 @@ check_laads_order::check_laads_order(QWidget *parent)
     connect(ui->actionImport_Order, &QAction::triggered, this,
             &check_laads_order::search_orders);
     connect(ui->actionClear_All, &QAction::triggered, this,
-            &check_laads_order::remove_all_order);
+            &check_laads_order::remove_all_orders);
     connect(ui->actionStart, &QAction::triggered, this,
             &check_laads_order::do_check);
+    connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this,
+            &check_laads_order::item_selection_changed);
+    connect(ui->actionClear_Selected, &QAction::triggered, this,
+            &check_laads_order::remove_selected_orders);
 }
 
 QString check_laads_order::get_orders_directory() {
@@ -43,7 +47,7 @@ void check_laads_order::search_orders() {
     while (it.hasNext()) {
         it.next();
         auto *_order = new Order(it.fileInfo().canonicalPath(), it.filePath());
-        orders.insert(it.fileInfo().baseName(), _order);
+        orders.insert(_order->get_order_sn(), _order);
     }
     if (!orders.isEmpty()) {
         ui->tableWidget->setRowCount(orders.size());
@@ -72,16 +76,33 @@ void check_laads_order::do_check() {
         w->calculate_local_cksum();
         qDebug() << timer.elapsed();
     }
-
 }
 
-void check_laads_order::remove_all_order() {
+void check_laads_order::remove_all_orders() {
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
     ui->actionStart->setEnabled(false);
     ui->actionClear_All->setEnabled(false);
 
     orders.clear();
+}
+
+void check_laads_order::remove_selected_orders() {
+    auto indexes = ui->tableWidget->selectionModel()->selectedRows();
+    if (indexes.size() == orders.size()) {
+        remove_all_orders();
+    } else {
+        for (auto &a: indexes) {
+            auto sn = ui->tableWidget->item(a.row(), 0)->text();
+            orders.erase(orders.find(sn));
+            ui->tableWidget->removeRow(a.row());
+        }
+    }
+}
+
+void check_laads_order::item_selection_changed() {
+    bool b = ui->tableWidget->selectedItems().isEmpty();
+    ui->actionClear_Selected->setEnabled(!b);
 }
 
 

@@ -26,7 +26,11 @@ private:
     QMap<QString, Order *> orders;
 private slots :
 
-    void remove_all_order();
+    void remove_selected_orders();
+
+    void remove_all_orders();
+
+    void item_selection_changed();
 
     void search_orders();
 
