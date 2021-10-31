@@ -66,16 +66,41 @@ void check_laads_order::search_orders() {
     }
 }
 
-
 check_laads_order::~check_laads_order() { delete ui; }
 
 void check_laads_order::do_check() {
     QElapsedTimer timer;
     for (auto &w: orders) {
         timer.start();
-        w->calculate_local_cksum();
-        qDebug() << timer.elapsed();
-    }
+        fill_result_cells(w->calculate_local_cksum(), w);
+        qDebug() << "耗时：" << timer.elapsed();
+    };
+}
+
+void
+check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
+    qDebug() << calculate_status;
+
+    if (calculate_status) {
+        result_cell_color.setNamedColor("#77D970");
+        result_cell_text = tr("PASS!");
+        // 如果有错误文件，就变成红色
+        if (this_order->get_check_result()) {
+            result_cell_color.setNamedColor("#FF5151");
+            result_cell_text = tr("FAIL!");
+        }
+    } else {
+        result_cell_color.setNamedColor("#FF865E");
+        result_cell_text = tr("Canceled!");
+    }//计算过程被取消了
+
+
+    auto order_sn = this_order->get_order_sn();
+    auto items = ui->tableWidget->findItems(order_sn, Qt::MatchExactly);
+    auto result_item = new QTableWidgetItem;
+    result_item->setBackgroundColor(result_cell_color);
+    result_item->setText(result_cell_text);
+    ui->tableWidget->setItem(items[0]->row(), 3, result_item);
 }
 
 void check_laads_order::remove_all_orders() {
@@ -104,5 +129,6 @@ void check_laads_order::item_selection_changed() {
     bool b = ui->tableWidget->selectedItems().isEmpty();
     ui->actionClear_Selected->setEnabled(!b);
 }
+
 
 

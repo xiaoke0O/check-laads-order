@@ -23,7 +23,12 @@ public:
 private:
     QString get_orders_directory();
 
+    void fill_result_cells(bool calculate_status, Order *this_order);
+
     QMap<QString, Order *> orders;
+
+    QColor result_cell_color;
+    QString result_cell_text;
 private slots :
 
     void remove_selected_orders();

@@ -29,7 +29,9 @@ public:
 
     int get_local_file_number() { return local_files_list.size(); };
 
-    void calculate_local_cksum();
+    bool get_check_result();
+
+    bool calculate_local_cksum();
 
 
 private:
@@ -37,6 +39,8 @@ private:
     QMap<QString, QString> order_files_package;
     QStringList local_files_list;
     QMap<QString, QString> local_files_package;
+
+    bool calculate_status;
 
     QStringList match_files;
     QStringList error_files;
@@ -56,6 +60,7 @@ private:
 // 错误文件——cksum值不匹配的文件；
 // 多余文件——本地有而cksum文件中没有的文件
     void compare_cksum();
+    void create_report();
 };
 
 

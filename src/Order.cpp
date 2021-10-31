@@ -78,14 +78,13 @@ uint32_t Order::get_file_cksum(FILE *fp) {
     return crc;
 }
 
-void Order::calculate_local_cksum() {
-    QProgressDialog progressDialog;
-    progressDialog.setCancelButtonText(tr("&Cancel"));
+bool Order::calculate_local_cksum() {
+    auto *progressDialog = new QProgressDialog;
+    progressDialog->setCancelButtonText(tr("&Cancel"));
     int file_count = local_files_list.size();
-    qDebug() << file_count;
-    progressDialog.setRange(0, file_count);
-    progressDialog.setWindowTitle(tr("Calculate Order Files cksum"));
-
+    progressDialog->setRange(0, file_count);
+    progressDialog->setWindowTitle(tr("Calculate Order Files cksum"));
+    calculate_status = true;
     for (decltype(local_files_list.size()) i = 0;
          i < local_files_list.size(); i++) {
         QString file_name = local_files_list[i].split("/").takeLast();
@@ -97,17 +96,19 @@ void Order::calculate_local_cksum() {
         fclose(fp);
         local_files_package.insert(file_name, checksum);
 
-        progressDialog.setValue(i);
-        progressDialog.setLabelText(
+        progressDialog->setValue(i);
+        progressDialog->setLabelText(
                 tr("Running file number %1 of %n", nullptr,
                    local_files_list.size()).arg(i));
         QCoreApplication::processEvents();
-        if (progressDialog.wasCanceled())
+        if (progressDialog->wasCanceled()) {
+            calculate_status = false;
             break;
+        }
     }
-    progressDialog.setValue(file_count);
-
-    compare_cksum();
+    progressDialog->setValue(file_count);
+    if (calculate_status)compare_cksum();
+    return calculate_status;
 }
 
 void Order::compare_cksum() {
@@ -139,4 +140,10 @@ void Order::compare_cksum() {
     qDebug() << tr("b中错误的：%1").arg(error_files.size());
     qDebug() << tr("b中缺失的：%1").arg(missing_files.size());
     qDebug() << tr("b中多余的：%1").arg(extra_files.size());
+}
+
+bool Order::get_check_result() {
+    return (!error_files.isEmpty() ||
+            !missing_files.isEmpty() ||
+            !extra_files.isEmpty());
 }
