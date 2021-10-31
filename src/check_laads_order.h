@@ -26,9 +26,11 @@ private:
     QMap<QString, Order *> orders;
 private slots :
 
+    void remove_all_order();
+
     void search_orders();
 
-    void do_check() ;
+    void do_check();
 
 private:
     Ui::check_laads_order *ui;

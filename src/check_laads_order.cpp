@@ -18,6 +18,8 @@ check_laads_order::check_laads_order(QWidget *parent)
             &QApplication::aboutQt);
     connect(ui->actionImport_Order, &QAction::triggered, this,
             &check_laads_order::search_orders);
+    connect(ui->actionClear_All, &QAction::triggered, this,
+            &check_laads_order::remove_all_order);
     connect(ui->actionStart, &QAction::triggered, this,
             &check_laads_order::do_check);
 }
@@ -44,7 +46,6 @@ void check_laads_order::search_orders() {
         orders.insert(it.fileInfo().baseName(), _order);
     }
     if (!orders.isEmpty()) {
-        ui->actionStart->setEnabled(true);
         ui->tableWidget->setRowCount(orders.size());
         int ix = 0;
         for (auto &w: orders) {
@@ -56,6 +57,8 @@ void check_laads_order::search_orders() {
                     QString::number(w->get_local_file_number())));
             ix++;
         }
+        ui->actionStart->setEnabled(true);
+        ui->actionClear_All->setEnabled(true);
     }
 }
 
@@ -67,9 +70,18 @@ void check_laads_order::do_check() {
     for (auto &w: orders) {
         timer.start();
         w->calculate_local_cksum();
-        qDebug()<<timer.elapsed();
+        qDebug() << timer.elapsed();
     }
 
+}
+
+void check_laads_order::remove_all_order() {
+    ui->tableWidget->clearContents();
+    ui->tableWidget->setRowCount(0);
+    ui->actionStart->setEnabled(false);
+    ui->actionClear_All->setEnabled(false);
+
+    orders.clear();
 }
 
 

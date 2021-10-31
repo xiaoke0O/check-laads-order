@@ -3,5 +3,6 @@
         <file>icons/add_circle.png</file>
         <file>icons/exit.png</file>
         <file>icons/play.png</file>
+        <file>icons/clear_all.png</file>
     </qresource>
 </RCC>
