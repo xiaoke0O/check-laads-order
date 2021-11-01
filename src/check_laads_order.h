@@ -5,46 +5,45 @@
 #include <QDir>
 #include "Order.h"
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
-    class check_laads_order;
+class check_laads_order;
 }
 QT_END_NAMESPACE
 
 class check_laads_order : public QMainWindow {
-Q_OBJECT
+ Q_OBJECT
 
-public:
-    explicit check_laads_order(QWidget *parent = nullptr);
+ public:
+  explicit check_laads_order(QWidget *parent = nullptr);
 
-    ~check_laads_order() override;
+  ~check_laads_order() override;
 
-private:
-    QString get_orders_directory();
+ private:
+  QString get_orders_directory();
 
-    void fill_result_cells(bool calculate_status, Order *this_order);
+  void fill_result_cells(bool calculate_status, Order *this_order);
 
-    QMap<QString, Order *> orders;
+  QMap<QString, Order *> orders;
 
-    QColor result_cell_color;
-    QString result_cell_text;
-private slots :
+  QColor result_cell_color;
+  QString result_cell_text;
+ private slots :
 
-    void remove_selected_orders();
+  void remove_selected_orders();
 
-    void remove_all_orders();
+  void remove_all_orders();
 
-    void item_selection_changed();
+  void item_selection_changed();
 
-    void search_orders();
+  void search_orders();
 
-    void do_check();
+  void do_check();
 
-    void show_report();
+  void show_report();
 
-private:
-    Ui::check_laads_order *ui;
+ private:
+  Ui::check_laads_order *ui;
 };
 
 #endif  // CHECK_LAADS_ORDER_H
