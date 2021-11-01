@@ -13,13 +13,15 @@
 #include <QCoreApplication>
 //TODO: Release时删除
 #include <QDebug>
+#include <utility>
 
 #include "fast_cksum.h"
 
-Order::Order(QString order_dir, QString checksum_file) {
+Order::Order(QString local_order_dir, const QString &checksum_file)
+	: order_dir(std::move(local_order_dir)) {
   order_sn = checksum_file.split("_").takeLast();
   parsing_checksum_file(checksum_file);
-  parsing_local_file(order_dir);
+  parsing_local_file();
 }
 
 void Order::parsing_checksum_file(QString cksum_file) {
@@ -40,9 +42,9 @@ void Order::parsing_checksum_file(QString cksum_file) {
   }
 }
 
-void Order::parsing_local_file(QString local_order_dir) {
+void Order::parsing_local_file() {
   QStringList filter{"*.hdf", "*.nc"};
-  QDirIterator order_file_iter(local_order_dir, filter, QDir::Files);
+  QDirIterator order_file_iter(order_dir, filter, QDir::Files);
   while (order_file_iter.hasNext()) {
 	local_files_list << order_file_iter.next();
   }
@@ -149,6 +151,6 @@ bool Order::get_check_result() {
 
 void Order::show_report() {
   this_order_report =
-	  new report(order_sn, error_files, missing_files, extra_files);
+	  new report(order_dir, order_sn, error_files, missing_files, extra_files);
   this_order_report->show();
 }

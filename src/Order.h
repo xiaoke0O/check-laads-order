@@ -21,7 +21,7 @@
 class Order : public QObject {
  Q_OBJECT
  public:
-  Order(QString local_order_dir, QString checksum_file);
+  Order(QString local_order_dir, const QString& checksum_file);
 
   QString get_order_sn() { return order_sn; };
 
@@ -37,6 +37,7 @@ class Order : public QObject {
 
  private:
   QString order_sn;
+  QString order_dir;
   QMap<QString, QString> order_files_package;
   QStringList local_files_list;
   QMap<QString, QString> local_files_package;
@@ -55,7 +56,7 @@ class Order : public QObject {
 
   void parsing_checksum_file(QString cksum_file);
 
-  void parsing_local_file(QString order_dir);
+  void parsing_local_file();
 
 // 通过对比从cksum文件中提取的文件名和cksum值与从本地文件统计得到的文件名和cksum值
 // 筛选出
