@@ -9,22 +9,28 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-    class report;
+class report;
 }
 QT_END_NAMESPACE
 
 class report : public QWidget {
-Q_OBJECT
-public:
-    report(QString order_sn);
+ Q_OBJECT
+ public:
+  report(QString _order_sn,
+		 QStringList _error_files,
+		 QStringList _missing_files,
+		 QStringList _extra_files);
 
-    void set_content(QStringList &error_files,QStringList &missing_files,QStringList &extra_files);
+  ~report() override;
 
-    ~report() override;
-
-private:
-    Ui::report *ui;
+ private:
+  QString order_sn;
+  QStringList error_files;
+  QStringList missing_files;
+  QStringList extra_files;
+ private:
+  void set_content();
+  Ui::report *ui;
 };
-
 
 #endif //CHECK_LAADS_ORDER_REPORT_H
