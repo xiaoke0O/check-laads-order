@@ -87,7 +87,7 @@ check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
   if (calculate_status) {
 	ui->actionOpen_Check_Report->setEnabled(true);
 	ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
-	result_cell_color.setNamedColor("#77D970");
+    result_cell_color.setRgb(0x77,0xd9,0x70);
 	result_cell_text = tr("PASS!");
 	// 如果有错误文件，就变成红色
 	if (this_order->get_check_result()) {
