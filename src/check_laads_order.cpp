@@ -103,7 +103,7 @@ check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
   auto order_sn = this_order->get_order_sn();
   auto items = ui->tableWidget->findItems(order_sn, Qt::MatchExactly);
   auto result_item = new QTableWidgetItem;
-  result_item->setBackgroundColor(result_cell_color);
+  result_item->setBackground(result_cell_color);
   result_item->setText(result_cell_text);
   ui->tableWidget->setItem(items[0]->row(), 3, result_item);
 }

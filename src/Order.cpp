@@ -42,7 +42,7 @@ void Order::parsing_checksum_file(const QString &cksum_file) {
 	  line = in.readLine();
 	  if (line.startsWith('#'))
 		continue;
-	  QStringList parts = line.split(' ', QString::SkipEmptyParts);
+	  QStringList parts = line.split(' ', Qt::SkipEmptyParts);
 	  QString checksum = parts[0];
 	  QString file_name = parts[2];
 	  order_files_package.insert(file_name, checksum);
