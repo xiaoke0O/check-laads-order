@@ -77,6 +77,7 @@ class Order : public QWidget {
   void fill_report();
  private slots:
   void create_downloadable_files_link();
+  void delete_extra_files();
 };
 
 #endif //CHECK_LAADS_ORDER_ORDER_H

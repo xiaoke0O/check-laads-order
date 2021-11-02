@@ -20,7 +20,7 @@
 
 #include "fast_cksum.h"
 
-Order::Order(QString local_order_dir, const QString& checksum_file)
+Order::Order(QString local_order_dir, const QString &checksum_file)
 	: order_dir(std::move(local_order_dir)),
 	  calculate_status(true),
 	  ui_report(new Ui::report) {
@@ -123,8 +123,8 @@ bool Order::calculate_local_cksum() {
 }
 
 void Order::compare_cksum() {
-  auto order_copy=order_files_package;
-  auto local_copy=local_files_package;
+  auto order_copy = order_files_package;
+  auto local_copy = local_files_package;
   QMapIterator<QString, QString> i(order_copy);
   QMapIterator<QString, QString> i_local(local_copy);
   while (i_local.hasNext()) {
@@ -175,6 +175,10 @@ void Order::show_report() {
 		  &QPushButton::clicked,
 		  this,
 		  &Order::create_downloadable_files_link);
+  connect(ui_report->pushButton_delete,
+		  &QPushButton::clicked,
+		  this,
+		  &Order::delete_extra_files);
   this->show();
 }
 
@@ -232,4 +236,27 @@ void Order::create_downloadable_files_link() {
 	QMessageBox::critical(this, tr("Save Error"), tr("Error writing this file"));
   }
   write_out.close();
+}
+void Order::delete_extra_files() {
+  QStringList extra_files_path;
+  for (auto &file: extra_files) {
+	extra_files_path << order_dir + "/" + file;
+  }
+  QMessageBox::StandardButton rb = QMessageBox::question(this,
+														 tr("Delete Files"),
+														 tr("Are you sure you "
+															"want to delete these files?"),
+														 QMessageBox::Yes
+															 | QMessageBox::No,
+														 QMessageBox::No);
+  int i = 0;
+  if (rb == QMessageBox::Yes)
+	for (auto &file: extra_files_path)
+	  if (QFile(file).remove())
+		i++;
+  QMessageBox::information(this,
+						   tr("Delete Result"),
+						   tr("Successfully Delete %1 file(s)").arg(i));
+  ui_report->textBrowser_unwanted->clear();
+  ui_report->pushButton_delete->setDisabled(true);
 }
