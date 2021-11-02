@@ -63,6 +63,7 @@ void check_laads_order::search_orders() {
 		  QString::number(w->get_order_file_number())));
 	  ui->tableWidget->setItem(ix, 2, new QTableWidgetItem(
 		  QString::number(w->get_local_file_number())));
+	  ui->tableWidget->setItem(ix,3,new QTableWidgetItem(""));
 	  ix++;
 	}
 	ui->actionStart->setEnabled(true);
