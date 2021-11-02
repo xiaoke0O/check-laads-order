@@ -91,7 +91,7 @@ check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
 	result_cell_text = tr("PASS!");
 	// 如果有错误文件，就变成红色
 	if (this_order->get_check_result()) {
-	  result_cell_color.setRgb(0xff，0x51,0x51);
+	  result_cell_color.setRgb(0xff,0x51,0x51);
 	  result_cell_text = tr("FAIL!");
 	}
   } else {
