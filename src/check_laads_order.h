@@ -22,7 +22,7 @@ class check_laads_order : public QMainWindow {
  private:
   QString get_orders_directory();
 
-  void fill_result_cells(bool calculate_status, Order *this_order);
+  void fill_result_cells(Order *this_order);
 
   QMap<QString, Order *> orders;
 

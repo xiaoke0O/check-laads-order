@@ -76,15 +76,15 @@ void check_laads_order::do_check() {
   QElapsedTimer timer;
   for (auto &w: orders) {
 	timer.start();
-	fill_result_cells(w->calculate_local_cksum(), w);
+	fill_result_cells(w);
 	qDebug() << "耗时：" << timer.elapsed();
   }
 }
 
 void
-check_laads_order::fill_result_cells(bool calculate_status, Order *this_order) {
+check_laads_order::fill_result_cells(Order *this_order) {
 
-  if (calculate_status) {
+  if (this_order->calculate_local_cksum()) {
 	ui->actionOpen_Check_Report->setEnabled(true);
 	ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
     result_cell_color.setRgb(0x77,0xd9,0x70);
