@@ -20,7 +20,7 @@
 
 #include "fast_cksum.h"
 
-Order::Order(QString local_order_dir, const QString &checksum_file)
+Order::Order(QString local_order_dir, const QString& checksum_file)
 	: order_dir(std::move(local_order_dir)),
 	  calculate_status(true),
 	  ui_report(new Ui::report) {
@@ -47,8 +47,9 @@ void Order::parsing_checksum_file(const QString &cksum_file) {
 	  QString file_name = parts[2];
 	  order_files_package.insert(file_name, checksum);
 	}
-//        qDebug() << order_files;
+
   }
+  infile.close();
 }
 
 void Order::parsing_local_file() {
@@ -122,30 +123,34 @@ bool Order::calculate_local_cksum() {
 }
 
 void Order::compare_cksum() {
-  QMapIterator<QString, QString> i(order_files_package);
-  QMapIterator<QString, QString> i_local(local_files_package);
+  auto order_copy=order_files_package;
+  auto local_copy=local_files_package;
+  QMapIterator<QString, QString> i(order_copy);
+  QMapIterator<QString, QString> i_local(local_copy);
   while (i_local.hasNext()) {
 	i_local.next();
-	auto x = order_files_package.find(i_local.key());
+	auto x = order_copy.find(i_local.key());
 	//说明找到了并且匹配了
-	if (x != order_files_package.end() && x.value() == i_local.value()) {
+	if (x != order_copy.end() && x.value() == i_local.value()) {
 	  match_files << x.key();
-	  order_files_package.erase(x);
+	  order_copy.erase(x);
 	  continue;
 	}
 	//说明找到了但是不匹配
-	if (x != order_files_package.end() && x.value() != i_local.value()) {
+	if (x != order_copy.end() && x.value() != i_local.value()) {
 	  error_files << x.key();
-	  order_files_package.erase(x);
+	  order_copy.erase(x);
 	  continue;
 	}
 	//说明在b中有而a中没有，那么这个就是多余项
-	if (x == order_files_package.end())
+	if (x == order_copy.end())
 	  extra_files << i_local.key();
   }
   //等全都检索完了，a也擦除完了，a中剩下的没被擦除的，就是b中缺失的。
-  missing_files << order_files_package.keys();
+  missing_files << order_copy.keys();
 
+  order_copy.clear();
+  local_copy.clear();
   qDebug() << tr("ab匹配的：%1").arg(match_files.size());
   qDebug() << tr("b中错误的：%1").arg(error_files.size());
   qDebug() << tr("b中缺失的：%1").arg(missing_files.size());
