@@ -24,7 +24,7 @@ Order::Order(QString local_order_dir, const QString &checksum_file)
 	: order_dir(std::move(local_order_dir)),
 	  calculate_status(true),
 	  ui_report(new Ui::report) {
-
+  ui_report->setupUi(this);
   order_sn = checksum_file.split("_").takeLast();
   parsing_checksum_file(checksum_file);
   parsing_local_file();
@@ -94,7 +94,7 @@ bool Order::calculate_local_cksum() {
   int file_count = local_files_list.size();
   progressDialog->setRange(0, file_count);
   progressDialog->setWindowTitle(tr("Calculate Order Files cksum"));
-  calculate_status = true;
+
   for (decltype(local_files_list.size()) i = 0;
 	   i < local_files_list.size(); i++) {
 	QString file_name = local_files_list[i].split("/").takeLast();
@@ -159,7 +159,7 @@ bool Order::get_check_result() {
 }
 
 void Order::show_report() {
-  ui_report->setupUi(this);
+
   setWindowTitle(tr("Order %1 Check Report").arg(order_sn));
   ui_report->pushButton_creat->setDisabled(true);
   ui_report->pushButton_delete->setDisabled(true);
