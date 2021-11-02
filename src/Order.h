@@ -11,17 +11,26 @@
 #include <QObject>
 #include <QProgressDialog>
 #include <QTimer>
-#include "report.h"
+#include <QWidget>
 
 #ifdef Q_OS_WINDOWS
 #define posix_memalign(p, a, s) \
   (((*(p)) = _aligned_malloc((s), (a))), *(p) ? 0 : errno)
 #endif
 
-class Order : public QObject {
+
+
+QT_BEGIN_NAMESPACE
+namespace Ui {
+class report;
+}
+QT_END_NAMESPACE
+
+class Order : public QWidget {
  Q_OBJECT
  public:
   Order(QString local_order_dir, const QString& checksum_file);
+  ~Order();
 
   QString get_order_sn() { return order_sn; };
 
@@ -49,7 +58,7 @@ class Order : public QObject {
   QStringList missing_files;
   QStringList extra_files;
 
-  report *this_order_report;
+  Ui::report *ui_report;
 
  private:
   uint32_t get_file_cksum(FILE *fp);
@@ -64,6 +73,10 @@ class Order : public QObject {
 // 错误文件——cksum值不匹配的文件；
 // 多余文件——本地有而cksum文件中没有的文件
   void compare_cksum();
+
+  void fill_report();
+ private slots:
+  void create_downloadable_files_link();
 };
 
 #endif //CHECK_LAADS_ORDER_ORDER_H

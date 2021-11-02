@@ -1,11 +1,12 @@
 add_executable(check_laads_order 
+report.ui
 check_laads_order.ui
 icons.qrc
 translations.qrc
 check_laads_order.cpp
 fast_cksum.cpp
-main.cpp
-        Order.cpp Order.h report.cpp report.h report.ui)
+Order.cpp
+main.cpp)
 # 如果是Release模式，就添加WIN32_EXECUTABLE属性，即隐藏终端窗口
 set_property(TARGET check_laads_order PROPERTY WIN32_EXECUTABLE $<CONFIG:Release>)
 

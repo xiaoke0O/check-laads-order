@@ -2,6 +2,7 @@
 // Created by Xueke on 2021/10/29.
 //
 #include "Order.h"
+#include "ui_report.h"
 
 #include <cinttypes>
 
@@ -11,6 +12,8 @@
 #include <QStringList>
 #include <QDirIterator>
 #include <QCoreApplication>
+#include <QFileDialog>
+#include <QMessageBox>
 //TODO: Release时删除
 #include <QDebug>
 #include <utility>
@@ -18,12 +21,16 @@
 #include "fast_cksum.h"
 
 Order::Order(QString local_order_dir, const QString &checksum_file)
-	: order_dir(std::move(local_order_dir)) {
+    : order_dir(std::move(local_order_dir)),ui_report(new Ui::report) {
+
   order_sn = checksum_file.split("_").takeLast();
   parsing_checksum_file(checksum_file);
   parsing_local_file();
 }
 
+Order::~Order(){
+    delete ui_report;
+}
 void Order::parsing_checksum_file(QString cksum_file) {
   QFile infile(cksum_file);
   if (infile.open(QIODevice::ReadOnly)) {
@@ -150,7 +157,69 @@ bool Order::get_check_result() {
 }
 
 void Order::show_report() {
-  this_order_report =
-	  new report(order_dir, order_sn, error_files, missing_files, extra_files);
-  this_order_report->show();
+ui_report->setupUi(this);
+setWindowTitle(tr("Order %1 Check Report").arg(order_sn));
+ui_report->pushButton_creat->setDisabled(true);
+ui_report->pushButton_delete->setDisabled(true);
+
+fill_report();
+
+connect(ui_report->pushButton_creat,&QPushButton::clicked,this,&Order::create_downloadable_files_link);
+this->show();
+}
+
+void Order::fill_report(){
+      // 添上文件个数
+      ui_report->label_error->setText(
+          ui_report->label_error->text() +
+              QString("(%1)").arg(QString::number(error_files.size())));
+      ui_report->label_missing->setText(
+          ui_report->label_missing->text() +
+              QString("(%1)").arg(QString::number(missing_files.size())));
+      ui_report->label_unwanted->setText(
+          ui_report->label_unwanted->text() +
+              QString("(%1)").arg(QString::number(extra_files.size())));
+
+      // 文件内容
+      if (!error_files.isEmpty() || !missing_files.isEmpty()) {
+        for (auto &text: error_files)
+          ui_report->textBrowser_error->append(text);
+        for (auto &text: missing_files)
+          ui_report->textBrowser_missing->append(text);
+        ui_report->pushButton_creat->setEnabled(true);
+      }
+      if (!extra_files.isEmpty()) {
+        for (auto &text: extra_files)
+          ui_report->textBrowser_unwanted->append(text);
+        ui_report->pushButton_delete->setEnabled(true);
+      }
+}
+
+void Order::create_downloadable_files_link() {
+  QStringList links;
+  QString website = "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders";
+  for (auto &file_name: error_files)
+    links << QString("%1/%2/%3").arg(website, order_sn, file_name);
+  for (auto &file_name: missing_files)
+    links << QString("%1/%2/%3").arg(website, order_sn, file_name);
+
+  // 文件保存框
+  QString save_file_file = QString("%1/redownload_file_links.txt").arg(order_dir);
+  QString file_name = QFileDialog::getSaveFileName(this,
+                                                   tr("Save Download Links"),
+                                                   save_file_file,
+                                                   tr("Text (*.txt)"));
+  QFile write_out(file_name);
+  if (write_out.open(QFile::WriteOnly | QFile::Text)) {
+    QTextStream s(&write_out);
+    s << links.join("\n");
+    QMessageBox::information(this, tr("Successfully Save!"),
+                             tr("The download links for the error files and "
+                                "missing files have been saved, please download them "
+                                "as soon as possible <b>within the validity period of "
+                                "the order</b>."));
+  } else {
+    QMessageBox::critical(this, tr("Save Error"), tr("Error writing this file"));
+  }
+  write_out.close();
 }
