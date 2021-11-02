@@ -78,7 +78,7 @@ void check_laads_order::do_check() {
 	timer.start();
 	fill_result_cells(w->calculate_local_cksum(), w);
 	qDebug() << "耗时：" << timer.elapsed();
-  };
+  }
 }
 
 void

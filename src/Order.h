@@ -30,7 +30,7 @@ class Order : public QWidget {
  Q_OBJECT
  public:
   Order(QString local_order_dir, const QString& checksum_file);
-  ~Order();
+  ~Order() override;
 
   QString get_order_sn() { return order_sn; };
 
@@ -61,9 +61,9 @@ class Order : public QWidget {
   Ui::report *ui_report;
 
  private:
-  uint32_t get_file_cksum(FILE *fp);
+  static uint32_t get_file_cksum(FILE *fp);
 
-  void parsing_checksum_file(QString cksum_file);
+  void parsing_checksum_file(const QString& cksum_file);
 
   void parsing_local_file();
 
