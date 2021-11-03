@@ -2,10 +2,8 @@
 
 #include <QFileDialog>
 #include <QStandardPaths>
-#include <QDebug>
 #include <QDirIterator>
 #include <QStringList>
-#include <QElapsedTimer>
 
 #include "./ui_check_laads_order.h"
 #include "fast_cksum.h"
@@ -34,10 +32,9 @@ check_laads_order::check_laads_order(QWidget *parent)
 
 QString check_laads_order::get_orders_directory() {
   QString dialog_title = tr("Open Orders Directory");
-  //todo: release时改回来
-//    QString open_dir = QStandardPaths::writableLocation(
-//            QStandardPaths::DownloadLocation);
-  QString open_dir = "/media/xueke/bigDatabase/Datasets/Remote_Sensing";
+    QString open_dir = QStandardPaths::writableLocation(
+            QStandardPaths::DownloadLocation);
+//  QString open_dir = "/media/xueke/bigDatabase/Datasets/Remote_Sensing";
   return QFileDialog::getExistingDirectory(this, dialog_title, open_dir);
 }
 
@@ -74,12 +71,7 @@ void check_laads_order::search_orders() {
 check_laads_order::~check_laads_order() { delete ui; }
 
 void check_laads_order::do_check() {
-  QElapsedTimer timer;
-  for (auto &w: orders) {
-	timer.start();
-	fill_result_cells(w);
-	qDebug() << "耗时：" << timer.elapsed();
-  }
+  for (auto &w: orders) fill_result_cells(w);
 }
 
 void

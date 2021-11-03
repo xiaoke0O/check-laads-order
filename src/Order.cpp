@@ -14,8 +14,6 @@
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QMessageBox>
-//TODO: Release时删除
-#include <QDebug>
 #include <utility>
 
 #include "fast_cksum.h"
@@ -151,10 +149,6 @@ void Order::compare_cksum() {
 
   order_copy.clear();
   local_copy.clear();
-  qDebug() << tr("ab匹配的：%1").arg(match_files.size());
-  qDebug() << tr("b中错误的：%1").arg(error_files.size());
-  qDebug() << tr("b中缺失的：%1").arg(missing_files.size());
-  qDebug() << tr("b中多余的：%1").arg(extra_files.size());
 }
 
 bool Order::get_check_result() {
