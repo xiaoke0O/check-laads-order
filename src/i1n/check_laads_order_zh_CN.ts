@@ -4,44 +4,74 @@
 <context>
     <name>Order</name>
     <message>
-        <location filename="../Order.cpp" line="83"/>
+        <location filename="../Order.cpp" line="92"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="86"/>
+        <location filename="../Order.cpp" line="95"/>
         <source>Calculate Order Files cksum</source>
         <translation>计算订单文件的校验值</translation>
     </message>
     <message numerus="yes">
-        <location filename="../Order.cpp" line="101"/>
+        <location filename="../Order.cpp" line="110"/>
         <source>Running file number %1 of %n</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="139"/>
-        <source>ab匹配的：%1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../Order.cpp" line="217"/>
+        <source>Save Download Links</source>
+        <translation>保存下载链接文件</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="140"/>
-        <source>b中错误的：%1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../Order.cpp" line="219"/>
+        <source>Text (*.txt)</source>
+        <translation>文本文件(*.txt)</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="141"/>
-        <source>b中缺失的：%1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../Order.cpp" line="224"/>
+        <source>Successfully Save!</source>
+        <translation>保存成功！</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="142"/>
-        <source>b中多余的：%1</source>
-        <translation type="unfinished"></translation>
+        <location filename="../Order.cpp" line="225"/>
+        <source>The download links for the error files and missing files have been saved, please download them as soon as possible &lt;b&gt;within the validity period of the order&lt;/b&gt;.</source>
+        <translation>需重新下载的文件的下载链接已经保存，请在&lt;b&gt;订单有效期内&lt;/b&gt;尽快下载</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="153"/>
+        <location filename="../Order.cpp" line="230"/>
+        <source>Save Error</source>
+        <translation>保存错误</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="230"/>
+        <source>Error writing this file</source>
+        <translation>写文件时发生错误</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="240"/>
+        <source>Delete Files</source>
+        <translation>删除文件</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="241"/>
+        <source>Are you sure you want to delete these files?</source>
+        <translation>确定要删除这些文件吗？</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="252"/>
+        <source>Delete Result</source>
+        <translation>删除结果</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="253"/>
+        <source>Successfully Delete %1 file(s)</source>
+        <translation>成功删除了%1个文件</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="162"/>
         <source>Order %1 Check Report</source>
         <translation>订单 %1 的校验报告</translation>
     </message>
@@ -51,7 +81,7 @@
     <message>
         <location filename="../check_laads_order.ui" line="14"/>
         <source>check_laads_order</source>
-        <translation type="unfinished"></translation>
+        <translation>check_laads_order</translation>
     </message>
     <message>
         <location filename="../check_laads_order.ui" line="70"/>
@@ -126,7 +156,7 @@
     <message>
         <location filename="../check_laads_order.ui" line="238"/>
         <source>Open Check Report</source>
-        <translation type="unfinished"></translation>
+        <translation>打开检查报告</translation>
     </message>
     <message>
         <source>Ckeck Order</source>
@@ -143,22 +173,22 @@
         <translation>开始校验</translation>
     </message>
     <message>
-        <location filename="../check_laads_order.cpp" line="37"/>
+        <location filename="../check_laads_order.cpp" line="34"/>
         <source>Open Orders Directory</source>
         <translation>打开订单文件夹</translation>
     </message>
     <message>
-        <location filename="../check_laads_order.cpp" line="92"/>
+        <location filename="../check_laads_order.cpp" line="84"/>
         <source>PASS!</source>
         <translation>通过！</translation>
     </message>
     <message>
-        <location filename="../check_laads_order.cpp" line="96"/>
+        <location filename="../check_laads_order.cpp" line="88"/>
         <source>FAIL!</source>
         <translation>发现错误！</translation>
     </message>
     <message>
-        <location filename="../check_laads_order.cpp" line="100"/>
+        <location filename="../check_laads_order.cpp" line="92"/>
         <source>Canceled!</source>
         <translation>已取消！</translation>
     </message>
