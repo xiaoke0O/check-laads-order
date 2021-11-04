@@ -97,10 +97,14 @@ bool Order::calculate_local_cksum() {
   for (decltype(local_files_list.size()) i = 0;
 	   i < local_files_list.size(); i++) {
 	QString file_name = local_files_list[i].split("/").takeLast();
-	std::string str = local_files_list[i].toStdString();
-	const char *file_path_c = str.c_str();
+	const char *file_path_c = local_files_list[i].toLocal8Bit().data();
 	FILE *fp;
 	fp = fopen(file_path_c, "rb");
+	if(!fp) {
+	  QMessageBox::critical(this, "Open Error!", "File opening failed");
+	 calculate_status= false;
+	  break;
+	}
 	QString checksum = QString::number(get_file_cksum(fp));
 	fclose(fp);
 	local_files_package.insert(file_name, checksum);
