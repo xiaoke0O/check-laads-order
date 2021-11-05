@@ -162,7 +162,6 @@ bool Order::get_check_result() {
 }
 
 void Order::show_report() {
-
   setWindowTitle(tr("Order %1 Check Report").arg(order_sn));
   ui_report->pushButton_creat->setDisabled(true);
   ui_report->pushButton_delete->setDisabled(true);
@@ -183,16 +182,16 @@ void Order::show_report() {
 void Order::fill_report() {
   // 添上文件个数
   ui_report->label_error->setText(
-	  ui_report->label_error->text() +
-		  QString("(%1)").arg(QString::number(error_files.size())));
+		  tr("Missing Files (%1)").arg(QString::number(error_files.size())));
   ui_report->label_missing->setText(
-	  ui_report->label_missing->text() +
-		  QString("(%1)").arg(QString::number(missing_files.size())));
+		  tr("Error Files (%1)").arg(QString::number(missing_files.size())));
   ui_report->label_unwanted->setText(
-	  ui_report->label_unwanted->text() +
-		  QString("(%1)").arg(QString::number(extra_files.size())));
+		  tr("Unwanted Files (%1)").arg(QString::number(extra_files.size())));
 
   // 文件内容
+  ui_report->textBrowser_error->clear();
+  ui_report->textBrowser_missing->clear();
+  ui_report->textBrowser_unwanted->clear();
   if (!error_files.isEmpty() || !missing_files.isEmpty()) {
 	for (auto &text: error_files)
 	  ui_report->textBrowser_error->append(text);

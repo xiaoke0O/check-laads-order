@@ -14,64 +14,79 @@
         <translation>计算订单文件的校验值</translation>
     </message>
     <message numerus="yes">
-        <location filename="../Order.cpp" line="110"/>
+        <location filename="../Order.cpp" line="114"/>
         <source>Running file number %1 of %n</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="217"/>
+        <location filename="../Order.cpp" line="185"/>
+        <source>Missing Files (%1)</source>
+        <translation>缺失文件 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="187"/>
+        <source>Error Files (%1)</source>
+        <translation>错误文件 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="189"/>
+        <source>Unwanted Files (%1)</source>
+        <translation>多余文件 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../Order.cpp" line="220"/>
         <source>Save Download Links</source>
         <translation>保存下载链接文件</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="219"/>
+        <location filename="../Order.cpp" line="222"/>
         <source>Text (*.txt)</source>
         <translation>文本文件(*.txt)</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="224"/>
+        <location filename="../Order.cpp" line="229"/>
         <source>Successfully Save!</source>
         <translation>保存成功！</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="225"/>
+        <location filename="../Order.cpp" line="230"/>
         <source>The download links for the error files and missing files have been saved, please download them as soon as possible &lt;b&gt;within the validity period of the order&lt;/b&gt;.</source>
         <translation>需重新下载的文件的下载链接已经保存，请在&lt;b&gt;订单有效期内&lt;/b&gt;尽快下载</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="230"/>
+        <location filename="../Order.cpp" line="235"/>
         <source>Save Error</source>
         <translation>保存错误</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="230"/>
+        <location filename="../Order.cpp" line="235"/>
         <source>Error writing this file</source>
         <translation>写文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="240"/>
+        <location filename="../Order.cpp" line="245"/>
         <source>Delete Files</source>
         <translation>删除文件</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="241"/>
+        <location filename="../Order.cpp" line="246"/>
         <source>Are you sure you want to delete these files?</source>
         <translation>确定要删除这些文件吗？</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="252"/>
+        <location filename="../Order.cpp" line="257"/>
         <source>Delete Result</source>
         <translation>删除结果</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="253"/>
+        <location filename="../Order.cpp" line="258"/>
         <source>Successfully Delete %1 file(s)</source>
         <translation>成功删除了%1个文件</translation>
     </message>
     <message>
-        <location filename="../Order.cpp" line="162"/>
+        <location filename="../Order.cpp" line="165"/>
         <source>Order %1 Check Report</source>
         <translation>订单 %1 的校验报告</translation>
     </message>
@@ -222,7 +237,7 @@
     </message>
     <message>
         <location filename="../report.ui" line="50"/>
-        <source>Error FIles</source>
+        <source>Error Files</source>
         <translation>错误文件</translation>
     </message>
     <message>
@@ -230,9 +245,13 @@
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;SimSun&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Ubuntu&apos;; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error FIles</source>
+        <translation type="vanished">错误文件</translation>
     </message>
     <message>
         <location filename="../report.ui" line="74"/>
