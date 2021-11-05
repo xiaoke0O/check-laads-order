@@ -221,6 +221,8 @@ void Order::create_downloadable_files_link() {
 												   tr("Save Download Links"),
 												   save_file_file,
 												   tr("Text (*.txt)"));
+  if(file_name.isEmpty())
+	return;
   QFile write_out(file_name);
   if (write_out.open(QFile::WriteOnly | QFile::Text)) {
 	QTextStream s(&write_out);
